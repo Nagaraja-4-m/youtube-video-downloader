@@ -2,7 +2,7 @@
  To download youtube videos to local storage.
   
 Requirements:
- 1. python3.9
+ 1. python3
  2. flask - a python web framework
  3. pytube - a python library to work with youtube videos
  
