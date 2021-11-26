@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+           Download from YT
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width , initial-scale=1">
+
+        <!-- bootstrap links -->
+        <!-- Latest compiled and minified CSS -->   
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        
+        
+        <!-- CSS link-->
+        <link rel="stylesheet" type="text/css" href="../static/styles.css">
+
+
+        <!-- javascript for hide/show  video elements -->
+        <script>
+            function video_funct()
+            {
+                var x=document.getElementById("variable");
+                x.style.display="block";
+            }
+            function hide(count)
+            {
+                var y=document.getElementById("variable");
+                if(count==="0")
+                {
+                    y.style.display="none";   
+                }
+                else{
+                    y.style.display="block";
+                }
+                  
+            }
+        </script>
+        <!-- icon -->
+        <link rel="icon" href="../static/logo1.png" type="image/png" >
+    </head>
+    <body onload="javascript:hide('{{ count }}')">
+        <div class="container-fluid bg-dark text-white pt-3">
+            <h1 class="display-4 font-weight-bold text-sm-center">Download From Youtube </h1>
+            <p class="font-weight-bold text-sm-center">Download youtube videos in video or audio format in a single click.</p>
+            <br/>
+        </div>
+
+
+        <!-- input area -->
+        <div class="container pt-3 input-area">
+            <br/>
+            <form action="{{ url_for('open_link')}}" method="POST" >
+                        <div class="form-group ">
+                            <div class="input-group">
+                                <input type="url" class="form-control input-sm" name="link"  placeholder="Enter or Paste the youtube video link here. For example https://youtu.be/CHT2XUcl9h8" autocomplete="off" required/>
+                                <div class="input-group-append  input-btn">
+                                    <button onclick="video_funct()" class="btn btn-success" type="submit">Search</button>
+                                </div>   
+                            </div>
+                    </div>
+            </form>
+            <p class="text-center "> <b>Tip:</b> For better results Go to the youtube video,click on <b>share</b> then <b>copy</b> the link and <b>paste</b> here.</p>
+            <br/>
+        </div>
+        <!-- input area end -->
+
+
+        <!-- output area  -->
+        <div class="container pt-3 output-area" id="variable">
+
+            {% if link_validity %}
+
+             <div class="row">
+                <div class="col-8" >
+                     <iframe style="float:right;" width="636" height="315" src="https://www.youtube.com/embed/{{ yt.video_id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                     </iframe> 
+                 </div> 
+                 <div class="col-4" style="margin-top: 45px;">
+                     <p class="font-weight-bold text-sm"> <b>Title: </b>{{ yt.title }}</p>
+                     <p class="font-weight-bold text-sm"><b>Duration: </b> {{ yt.length }} seconds</p>
+                     <p class="font-weight-bold text-sm"><b>Thumbnail: </b> <a href="{{ yt.thumbnail_url }}" target="_blank" >click here</a></p>
+                </div>
+            </div>   
+
+            <!-- download area -->
+            <div class="row">
+                <div class="col-1">
+                </div>
+
+                <div class="col-2 ">
+                    <div class="dropdown">
+                        <button class="btn  btn-success dropdown-toggle vid-btn" type="submit" data-toggle="dropdown" style="float:left; margin-top: 20px; margin-bottom: 20px; margin-left: 0px;">Download Video<span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-area">
+                            {% for i in yt.streams.filter(progressive=True) %}
+                            <li> <a  href="{{ url_for('download',itag=i.itag,type=i.type) }}" target="_blank"> <button class="btn btn-success lst-btn" type="submit" name="{{i.itag }}">{{ i.resolution }} </button></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-2 ">
+                    <div class="dropdown">
+                        <button class="btn  btn-success dropdown-toggle vid-btn" type="submit" data-toggle="dropdown" style="float:left; margin-top: 20px; margin-bottom: 20px;">Download Audio<span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-area">
+                            {% for i in yt.streams.filter(only_audio=True) %}
+                            <li> <a  href="{{ url_for('download',itag=i.itag,type=i.type) }}" target="_blank"> <button class="btn btn-success lst-btn" type="submit" name="{{i.itag}}">{{ i.abr }} </button></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="col-2 ">
+                    <div class="dropdown">
+                        <button class="btn  btn-success dropdown-toggle vid-btn" type="submit" data-toggle="dropdown" style="float:left; margin-top: 20px; margin-bottom: 20px;">Download Muted video<span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-area">
+                            {% for i in yt.streams.filter(progressive=False,type='video') %}
+                            {% if i.itag in muted_itags %}
+                            <li> <a  href="{{ url_for('download',itag=i.itag,type=i.type) }}" target="_blank"> <button class="btn btn-success lst-btn" type="submit" name="{{ i.itag }}">{{ i.resolution }} </button></a></li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+ 
+            </div>
+
+             <!-- download area -->
+             {% elif link_validity==False %}
+             <p class="text-danger font-weight-bold text-center"> Unable to find the video. Looks like Url is invalid. </p>
+             <br/>
+             {% endif %}
+        </div>
+
+     <!-- output area -->   
+
+        <!-- information -->
+        <div class="container infromation-area">
+            <h5 style="font-weight: bold;"> How to use?</h5>
+            <p>1. Go to youtube,click on share then copy the link.</p>
+            <p>2. Now paste the link in the text box, then click on search.</p>
+            <p>3. Corresponding video will shown.</p>
+            <p>4. If you want an audio,click on Download audio, click on the available bitrate to download.</p>
+            <p>5. If you want a video with audio,click on Download video and then click on the quality.</p>
+            <p>6. If you want a video without audio,click on Download muted video and then click on the quality.</p>
+        </div>
+        <!-- information -->
+        <!-- footer -->
+        <div class="container-fluid bg-dark text-white footer-area">
+            <br/>
+            <div class="container">
+               <a href="mailto:nagarajam98plk@gmail.com" class="footer-text">Contact</a> 
+               <p class="Copyright_text"> Copyrights © 2021. All Rights Reserved.</p>
+                <br/>
+            </div>
+        </div>
+        <!-- footer -->
+    </body>
+</html>
+

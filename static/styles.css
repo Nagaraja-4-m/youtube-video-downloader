@@ -1,0 +1,108 @@
+/*
+ * Project: Youtube video downloader
+ * Author: Nagaraja M
+ * Email:      nagarajam98plk@gmail.com
+ 
+ */
+
+.input-area
+{
+    background-color:#f0f0f0;
+}
+.input-btn
+{
+    padding-left:6px;
+}
+.video-area
+{
+    margin: 10px;
+    border:double;
+    border-color: darkgray;
+}
+.output-area
+{
+    background-color:#fbfcfa;
+    margin-bottom: 10px;
+}
+.dropdown-area
+{
+ background-color:#fbfcfa;   
+}
+.lst-btn{
+    background-color:#fbfcfa;
+    color:rgb(5, 0, 8);
+    width: 100%;
+    padding: 2px;
+    font-weight: bold;
+    border-bottom:thin;
+
+}
+.lst-btn:hover{
+    background-color:rgba(4, 155, 37, 0.993);
+    color:rgb(255, 255, 255);
+    font-size:1.1rem;
+    border-style: solid;
+    border-color: chartreuse;
+}
+
+.aud-btn:hover{
+    background-color:rgba(4, 155, 37, 0.993);
+    color:rgb(255, 255, 255);
+    font-size:1.1rem;
+    border-style: solid;
+    border-color: chartreuse;
+}
+.vid-btn:hover{
+    background-color:rgba(4, 155, 37, 0.993);
+    color:rgb(255, 255, 255);
+    font-size:1.1rem;
+    border-style: solid;
+    border-color: chartreuse;
+}
+
+.video-pos
+{
+    width:100%;
+    align-items: center;
+}
+
+.align-right{
+    text-align: right;
+}
+
+.infromation-area
+{
+    background-color:#f0f0f0;
+    margin-top: 0px;
+    padding-top: 20px;
+    margin-bottom: 50px;
+
+}
+
+.footer-area
+{
+    left: 0;
+    bottom: 0;
+    position:relative;
+    text-align: center;
+}
+
+.Copyright_text
+{
+    margin-top: 16px;
+    color: #727070;
+}
+.Copyright_text:hover
+{
+    color: #acacac;
+}
+
+.footer-text
+{
+    color: #cac7c7;
+}
+.footer-text:hover
+{
+    color: #e9e0e0;
+}
+
