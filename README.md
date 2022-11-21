@@ -13,7 +13,8 @@ Setup:
 2. run main.py file, open the local server address in a browser.
 
 Home page:
- ![ytd-homepage-1](https://user-images.githubusercontent.com/89149882/143541274-39c164eb-d2ff-4125-8e35-0cd0187349ba.png)
+ ![ytd-homepage-1](https://user-images.githubusercontent.com/89149882/202982984-6877c52a-d6c5-46f3-a296-36c2b7cb193d.png)
  
  Download:
- ![ytd-homepage-2](https://user-images.githubusercontent.com/89149882/143541304-f642ae58-fa52-46aa-b4ea-4179dc4b3e01.png)
+ ![ytd-homepage-2](https://user-images.githubusercontent.com/89149882/202983198-131a8199-f7a5-425f-a3af-307b651b4fdd.png)
+
