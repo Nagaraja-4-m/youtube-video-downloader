@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../static/ntube_logo.png">
+    
+        <!-- bootstrap links -->
+        <!-- Latest compiled and minified CSS -->   
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        
+    <title>Ntube</title>
+    <style>
+        a{
+            text-decoration: none;
+        }
+        .fsd{
+            margin: 0;
+            padding: 0;
+        }
+        .navigation
+        {
+            padding: 20px 0px 10px 0px;
+            text-align: center;
+            color: white;
+
+
+        }
+        .title{
+            font-size:xx-large;
+        }
+        .title-u
+        {
+            color: red;
+            text-transform: uppercase;
+        }
+        .input-area{
+            background-color:#e2e0e0;
+            padding: 0px 10px;
+        }
+        .input-area .input-group
+        {
+            box-shadow: 0px 0px 40px 5px rgb(131, 129, 129);
+        }
+        .disclaimer{
+            font-size: smaller;
+            text-align: center;
+
+        }
+        .input-area a{
+            text-decoration: none;
+            font-weight:600;
+        }
+        .output-area{
+            margin-top: 2px;
+            font-weight: 800;
+            font-size: small;
+        }
+        .msg-failed{
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+        .dropdown-area
+            {
+            background-color:#fbfcfa;   
+            }
+            .lst-btn{
+                background-color:#fbfcfa;
+                color:rgb(5, 0, 8);
+                width: 100%;
+                padding: 2px;
+                font-weight: bold;
+                border-bottom:thin;
+
+            }
+            .lst-btn:hover{
+                background-color:rgba(4, 155, 37, 0.993);
+                color:rgb(255, 255, 255);
+                font-size:1.1rem;
+                border-style: solid;
+                border-color: chartreuse;
+            }
+
+            .aud-btn:hover{
+                background-color:rgba(4, 155, 37, 0.993);
+                color:rgb(255, 255, 255);
+                font-size:1.1rem;
+                border-style: solid;
+                border-color: chartreuse;
+            }
+            .vid-btn:hover{
+                background-color:rgba(4, 155, 37, 0.993);
+                color:rgb(255, 255, 255);
+                font-size:1.1rem;
+                border-style: solid;
+                border-color: chartreuse;
+            }
+
+            .video-pos
+            {
+                width:100%;
+                align-items: center;
+            }
+
+            .align-right{
+                text-align: right;
+            }
+            .footer-area{
+                display: flex;
+                padding: 10px 0px;
+                justify-content: center;
+                font-size: medium;
+
+            }
+            .footer-area a{
+                text-transform: none;
+            }
+            .footer-area p, .footer-area a{
+                color: silver;
+                padding: 0px 10px;
+
+            }
+
+    </style>
+</head>
+<body>
+    <div class="navigation bg-dark">
+        <a href="/"><h1 class="title"> <span class="title-u">N</span>tube</h1></a> 
+        <p>YouTube video downloader </p>
+    </div>
+    <div class="container">
+        <div class="pt-3 input-area">
+            <br>
+            <form method="POST" action="{{ url_for('open_link')}}">
+                <div class="form-group ">
+                    <div class="input-group">
+                        <input type="url" id="input_link" class="form-control input-sm" name="link"  
+                                placeholder="Paste YouTube video link here. Ex: https://youtu.be/CHT2XUcl9h8" autocomplete="off" 
+                                onPaste="setTimeout(function(){onPaste();}, 4);" required/>
+                        <div class="input-group-append  input-btn">
+                            <button onclick="onPaste()" class="btn btn-success" type="button">Search</button>
+                        </div>   
+                    </div>
+                </div>
+            </form>
+            <br>
+                <p class="disclaimer"> <b>Disclaimer:</b> We respect <a href="https://www.youtube.com/" target="_blank">YouTube</a> policies. This service is for demonstration  purpose only.</p>
+            <br/>
+        </div>
+            <div class="output-area">
+                {% if is_valid_link %}
+                    <hr>
+                    <!-- <div class="row"> -->
+                        <div class="col-lg-12" >
+                            <iframe class="embed-responsive" src="https://www.youtube.com/embed/{{ yt.video_id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                            </iframe> 
+                        <!-- </div>  -->
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col"><p> <b>Title: </b>{{ yt.title }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col"> <b>Duration: </b> {{'%0.2f' |format( yt.length / 60 |float) }} Minutes</div>
+                            <div class="col"> <b>Thumbnail: </b> <a href="https://img.youtube.com/vi/{{ yt.video_id }}/maxresdefault.jpg" target="_blank"  download><u>download</u></a></div>
+                            <div class="col"> 
+                                <details>
+                                    <summary><b><a onclick="showMoreDetails()">More details</a> </b></summary>
+                                </details>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col">
+                                <div class="dropdown">
+                                    <button class="btn  btn-success dropdown-toggle vid-btn" type="submit" data-toggle="dropdown" style="float:left; margin-top: 20px; margin-bottom: 20px; margin-left: 0px;">Download Video<span class="caret"></span></button>
+                                    <ul class="dropdown-menu dropdown-area">
+                                        {% for i in yt.streams.filter(progressive=True) %}
+                                        <li> <a  href="{{ url_for('download',itag=i.itag,type=i.type) }}" target="_blank"> <button class="btn btn-success lst-btn" type="submit" name="{{i.itag }}">{{ i.resolution }} -  {{'%0.2f'| format(i.filesize/(1024*1024)|float)}} MB </button></a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="dropdown">
+                                    <button class="btn  btn-success dropdown-toggle vid-btn" type="submit" data-toggle="dropdown" style="float:left; margin-top: 20px; margin-bottom: 20px;">Download Audio<span class="caret"></span></button>
+                                    <ul class="dropdown-menu dropdown-area">
+                                        {% for i in yt.streams.filter(only_audio=True) %}
+                                        <li> <a  href="{{ url_for('download',itag=i.itag,type=i.type) }}" target="_blank"> <button class="btn btn-success lst-btn" type="submit" name="{{i.itag}}">{{ i.abr }} - {{'%0.2f'| format(i.filesize/(1024*1024)|float)}} MB </button></a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="dropdown">
+                                    <button class="btn  btn-success dropdown-toggle vid-btn" type="submit" data-toggle="dropdown" style="float:left; margin-top: 20px; margin-bottom: 20px;">Download Muted video<span class="caret"></span></button>
+                                    <ul class="dropdown-menu dropdown-area">
+                                        {% for i in yt.streams.filter(adaptive=True,type='video', mime_type='video/webm') %}
+                                        <li> <a  href="{{ url_for('download',itag=i.itag,type=i.type) }}" target="_blank"> <button class="btn btn-success lst-btn" type="submit" name="{{ i.itag }}">{{ i.resolution }} - {{'%0.2f'| format(i.filesize/(1024*1024)|float)}} MB</button></a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                {% elif is_valid_link == false %}
+                        <br>
+                        <p class="msg-failed"> {{ message }}</p>
+                <hr>
+                {% endif %}
+        </div>
+    </div>
+        <!-- footer -->
+        <div class=" fixed-bottom bg-dark text-white footer-area">
+            <!-- <br> -->
+            <p><a href="mailto:nplk743@gmail.com"> Feedback </a></p>    
+            <p> Version: {{ version }}</p>
+            <!-- <br> -->
+        </div>
+        <!-- footer -->
+</body>
+<script>
+
+    function onPaste(){
+        var link=document.getElementById('input_link').value;
+        console.log('link:'+link);
+        window.location.href='/show?link='+link;
+    }
+</script>
+</html>
